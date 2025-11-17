@@ -5,6 +5,7 @@ import CreateEditNote from './components/CreateEditNote/CreateEditNote';
 import SignUp from './components/SignUp/SignUp';
 import SignIn from './components/SignIn/SignIn';
 import PrivateRoute from './components/PrivateRoute';
+import Error404 from './components/Error404/Error404';
 
 function App() {
   return (
@@ -16,10 +17,11 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
+  const token = localStorage.getItem('token');
   
-  const hideHeaderRoutes = ['/signin', '/signup'];
-  const shouldShowHeader = !hideHeaderRoutes.includes(location.pathname);
-
+  const hideHeaderRoutes = ['/signin', '/signup', '/404'];
+  const shouldShowHeader = token && !hideHeaderRoutes.includes(location.pathname);
+  
   return (
     <>
       {shouldShowHeader && <Header />}
@@ -44,6 +46,9 @@ function AppContent() {
             <CreateEditNote />
           </PrivateRoute>
         } />
+        <Route path="/404" element={<Error404 />} />
+        
+        <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
     </>
   );
